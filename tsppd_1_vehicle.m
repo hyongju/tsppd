@@ -1,8 +1,8 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 2;              % number of custumers(n)
-k = 1;              % capacity         
+n = 10;             % number of custumers(n)
+k = 3;              % capacity         
 rng('shuffle');     % random seed: shuffle
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
 % vehicle node: 1
@@ -16,13 +16,13 @@ v = 2*n + 1;        % number of vertices |V| = 2n + 1
 c = zeros(v,v);
 for i = 1:size(c,1)
     for j = 1:size(c,2)
-        c(i,j) = dist2(vert(i,:),vert(j,:));
+        c(i,j) = norm(vert(i,:)-vert(j,:));
     end
 end
-
+c = c + eye(v); % add identity to prevent zeros from appearing in the diagonal
 % adjacency matrix for a default tour: 1->2->3->..->2n->2n+1
 A0 = eye(2*n+1);
-A0 = [A0(2:2*n+1,:);A0(1,:)];
+A0 = [A0(2:2*n+1,:);A0(1,:)] + eye(v); % added identity to prevent zeros from appearing in the diagonal
 
 % constraint #0 (permutation): row, column sums are 1s
 Aperm = ones(v,1);
@@ -49,7 +49,7 @@ F = [x*Aperm == bperm, x'*Aperm == bperm, x(v,1)== 1 ...,   % constraint #0
 
 % objective
 obj = sum(sum(c.*x*A0*x'));
-ops = sdpsettings('verbose',1);
+ops = sdpsettings('verbose',1,'solver','bnb');
 optimize(F,obj,ops)
 
 % generate the optimal tour from x
