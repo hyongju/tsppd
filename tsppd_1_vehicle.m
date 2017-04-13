@@ -1,7 +1,7 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 10;             % number of custumers(n)
+n = 7;             % number of custumers(n)
 k = 3;              % capacity         
 rng('shuffle');     % random seed: shuffle
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
@@ -41,7 +41,7 @@ for i = 1:n
 end
 
 % integer programming
-xVec = binvar(v*v,1);           
+xVec = sdpvar(v*v,1);           
 x = reshape(xVec,v,v);          % decision variables as a v x v matrix
 F = [x*Aperm == bperm, x'*Aperm == bperm, x(v,1)== 1 ...,   % constraint #0
     L*x*d <= k*ones(v,1) ...,                               % constraint #1    
@@ -49,7 +49,7 @@ F = [x*Aperm == bperm, x'*Aperm == bperm, x(v,1)== 1 ...,   % constraint #0
 
 % objective
 obj = sum(sum(c.*x*A0*x'));
-ops = sdpsettings('verbose',1,'solver','bnb');
+ops = sdpsettings('verbose',1,'solver','quadprog');
 optimize(F,obj,ops)
 
 % generate the optimal tour from x
