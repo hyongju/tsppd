@@ -1,15 +1,16 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 7;             % number of custumers(n)
-k = 1;              % capacity    
+n = 3;             % number of custumers(n)
+k = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
-alph = 2;
+alph = 1;
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
 % vehicle node: 1
 % pick-up nodes: 2,...,n+1
 % delivery nodes: n+2,...,2n+1
 vert = rand(2*n+1,2);
+load('matlab.mat');
 v = 2*n + 1;        % number of vertices |V| = 2n + 1
 
 % cost matrix (c)
@@ -153,15 +154,15 @@ F = [Aieq*x <=bieq, Aeq*x == beq];
 bz = zeros(v,v);
 Q = zeros(v^2,v^2);
 for i = 1:v
-    Q((i-1) * v + 1:(i-1) * v + v,(i-1) * v + 1:(i-1) * v + v) =2*c;
+    Q((i-1) * v + 1:(i-1) * v + v,(i-1) * v + 1:(i-1) * v + v) =c;
 end
 for i = 1:v-1
-    Q(i*v+1:i*v+v,(i-1)*v+1:(i-1)*v+v) = c;
-    Q((i-1)*v+1:(i-1)*v+v,i*v+1:i*v+v) = c;
+    Q(i*v+1:i*v+v,(i-1)*v+1:(i-1)*v+v) = c/2;
+    Q((i-1)*v+1:(i-1)*v+v,i*v+1:i*v+v) = c/2;
 end
 
-Q((v-1)*v + 1:(v-1)*v + v,1:v) = c;
-Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c;
+Q((v-1)*v + 1:(v-1)*v + v,1:v) = c/2;
+Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c/2;
 
 
 
@@ -208,22 +209,21 @@ axis('equal');
 axis([0 1 0 1]);
 set(gca,'FontSize',16);
 
-% % plot constraint#1
-% figure,
-% plot(1:v,tril(ones(v,v))*value(x)*d,'bo-','MarkerSize',10,'LineWidth',2);
-% hold on;
-% line([0 v],[k,k],'Color','r','LineWidth',2);
-% set(gca,'FontSize',16);
-% xlabel('sequence');
-% ylabel('# of customers in the vehicle')
+% plot constraint#1
+figure,
+plot(1:v,Acap*value(x),'bo-','MarkerSize',10,'LineWidth',2);
+hold on;
+line([0 v],[k,k],'Color','r','LineWidth',2);
+set(gca,'FontSize',16);
+xlabel('sequence');
+ylabel('# of customers in the vehicle')
 
-% % plot constraint#2
-% figure,
-% for i = 1:size(eini,2)
-%     out(i) = (1:v)*value(x)*eini(:,i);
-% end
-% plot(1:n,out,'s-b','MarkerSize',10,'LineWidth',2);
-% line([0 n],[0,0],'Color','r','LineWidth',2);
-% set(gca,'FontSize',16);
-% xlabel('custumer ID');
-% ylabel('precedence')
+% plot constraint#2
+figure,
+out = Apre*value(x);
+
+plot(1:n,out,'s-b','MarkerSize',10,'LineWidth',2);
+line([0 n],[0,0],'Color','r','LineWidth',2);
+set(gca,'FontSize',16);
+xlabel('custumer ID');
+ylabel('precedence')
