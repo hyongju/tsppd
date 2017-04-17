@@ -1,7 +1,7 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 3;             % number of custumers(n)
+n = 3 ;             % number of custumers(n)
 k = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
@@ -30,11 +30,15 @@ for i = 1:size(c,1)
         sum_c(i) = sum_c(i) + abs(c(i,j));
     end
     c(i,i) = c(i,i) + sum_c(i);
+    cM(i) = c(i,i);
+end
+for i = 1:size(c,1)
+    c(i,i) = max(cM);
 end
 all(eig(c)>=0)  % check if c is PSD
 % adjacency matrix for a default tour: 1->2->3->..->2n->2n+1
 A0 = eye(2*n+1);
-A0 = [A0(2:2*n+1,:);A0(1,:)] + alph*eye(v); % added identity to prevent zeros from appearing in the diagonal
+A0 = [A0(2:2*n+1,:);A0(v,:)] + alph*eye(v); % added identity to prevent zeros from appearing in the diagonal
 
 
 % d(i) = +1 (pickup), -1 (deliver)
@@ -89,18 +93,14 @@ end
 bperm = ones(size(Aperm,1),1);
 
 % generate d's
-
-for l = 1:length(d)
-    for i = 1:size(c,1)
-%         dRC = [dRC;d];
-        for j = 1:size(c,2)
-            if i <=l
-                Acap(l,i+(j-1)*size(c,1)) = d(j);
-            else
-                Acap(l,i+(j-1)*size(c,1)) = 0;
-            end
-        end
+d_tmp = repmat(d,v,1)';
+z_tmp = zeros(size(d_tmp));
+for i = 1:v
+    zi = z_tmp;
+    for j = 1:i
+        zi(1,(j-1)*v+1:j*v) = ones(1,v);
     end
+    Acap(i,:) = d_tmp.*zi;
 end
 
 bcap = ones(size(Acap,1),1)*k;
@@ -126,17 +126,23 @@ end
 
 N = 1:1:2*n+1;
 Apre = zeros(size(eini,1),v*v);
-
-for l = 1:size(eini,1)
-    m = 0;
-    for i = 1:size(eini,2)
-        for j =1:length(N)
-            m = m+1;
-            Apre(l,m) = eini(l,i)*N(1,j);
-        end
-
-    end
+ApreN = repmat(N,1,v);
+% for l = 1:size(eini,1)
+%     m = 0;
+%     for i = 1:size(eini,2)
+%         for j =1:length(N)
+%             m = m+1;
+%             Apre(l,m) = eini(l,i)*N(1,j);
+%         end
+% 
+%     end
+% end
+einit = [];
+for i = 1:v
+    einil = repmat(eini(:,i),1,v);
+    einit = [einit einil];
 end
+Apre = einit.*repmat(ApreN,size(eini,1),1);
 bpre = zeros(size(Apre,1),1);
 
 %% interger programming....
@@ -144,11 +150,11 @@ Aeq = [Aperm;Atend];
 beq = [bperm;1];
 
 
-Aieq = [Acap;Apre];
-bieq = [bcap;bpre];
+% Aieq = [Acap;Apre];
+% bieq = [bcap;bpre];
 
 x = binvar(v^2,1);
-F = [Aieq*x <=bieq, Aeq*x == beq];
+F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
 
 bz = zeros(v,v);
@@ -172,7 +178,7 @@ optimize(F,obj,ops)
 
 % generate the optimal tour from x
 solution = reshape(value(x),[size(c,1),size(c,2)]);
-tour = round(solution*(1:v)');
+tour = round(solution'*[1:v]');
 tour = [1;tour];
 
 

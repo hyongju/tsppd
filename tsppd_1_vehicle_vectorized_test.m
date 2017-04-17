@@ -1,7 +1,7 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 3;             % number of custumers(n)
+n = 3 ;             % number of custumers(n)
 k = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
@@ -30,6 +30,10 @@ for i = 1:size(c,1)
         sum_c(i) = sum_c(i) + abs(c(i,j));
     end
     c(i,i) = c(i,i) + sum_c(i);
+    cM(i) = c(i,i);
+end
+for i = 1:size(c,1)
+    c(i,i) = max(cM);
 end
 all(eig(c)>=0)  % check if c is PSD
 % adjacency matrix for a default tour: 1->2->3->..->2n->2n+1
@@ -38,7 +42,7 @@ A0 = [A0(2:2*n+1,:);A0(1,:)] + alph*eye(v); % added identity to prevent zeros fr
 
 
 % d(i) = +1 (pickup), -1 (deliver)
-d = [0;ones(n,1);-ones(n,1)];
+d = [ones(n,1);-ones(n,1);0];
 
 % constraint #1: permutation
 
@@ -120,23 +124,30 @@ Atend = reshape(Ate,size(c,2)*size(c,1),1)';
 % constraint #2 (precedence), eini = ei - en+1
 for i = 1:n
     eini(i,:) = zeros(1,v);
-    eini(i,i+1) = 1;
-    eini(i,i+n+1) = -1;
+    eini(i,i) = 1;
+    eini(i,i+n) = -1;
 end
 
 N = 1:1:2*n+1;
+N = [N(1,2:2*n+1),1];
 Apre = zeros(size(eini,1),v*v);
-
-for l = 1:size(eini,1)
-    m = 0;
-    for i = 1:size(eini,2)
-        for j =1:length(N)
-            m = m+1;
-            Apre(l,m) = eini(l,i)*N(1,j);
-        end
-
-    end
+ApreN = repmat(N,1,v);
+% for l = 1:size(eini,1)
+%     m = 0;
+%     for i = 1:size(eini,2)
+%         for j =1:length(N)
+%             m = m+1;
+%             Apre(l,m) = eini(l,i)*N(1,j);
+%         end
+% 
+%     end
+% end
+einit = [];
+for i = 1:v
+    einil = repmat(eini(:,i),1,v);
+    einit = [einit einil];
 end
+Apre = einit.*repmat(ApreN,size(eini,1),1);
 bpre = zeros(size(Apre,1),1);
 
 %% interger programming....
@@ -144,11 +155,11 @@ Aeq = [Aperm;Atend];
 beq = [bperm;1];
 
 
-Aieq = [Acap;Apre];
-bieq = [bcap;bpre];
+% Aieq = [Acap;Apre];
+% bieq = [bcap;bpre];
 
 x = binvar(v^2,1);
-F = [Aieq*x <=bieq, Aeq*x == beq];
+F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
 
 bz = zeros(v,v);
@@ -172,7 +183,7 @@ optimize(F,obj,ops)
 
 % generate the optimal tour from x
 solution = reshape(value(x),[size(c,1),size(c,2)]);
-tour = round(solution*(1:v)');
+tour = round(solution*[1:v]');
 tour = [1;tour];
 
 

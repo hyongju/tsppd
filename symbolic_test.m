@@ -6,7 +6,7 @@ A0 = eye(n);
 alph = 1;
 A0 = [A0(2:n,:);A0(1,:)]+alph*eye(n);
 A0=sym(A0);
-Q = expand(sum(sum(C.*(X*A0*X.'))));
+Q = expand(sum(sum(C.*(X*A0*X'))));
 
 
 N=jacobian(jacobian(Q,reshape(X,n*n,1)),reshape(X,n*n,1));
