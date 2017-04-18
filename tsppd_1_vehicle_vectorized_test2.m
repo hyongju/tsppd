@@ -151,8 +151,8 @@ beq = [bperm;1];
 x = binvar(v^2,1);
 X = reshape(x,v,v)';
 xx = reshape(X,v^2,1);
-F = [Acap*xx <=bcap, Apre * xx < bpre, Aeq*xx == beq];
-F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
+% F = [Acap*xx <=bcap, Apre * xx < bpre, Aeq*xx == beq];
+% F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
 
 bz = zeros(v,v);
@@ -160,13 +160,19 @@ Q = zeros(v^2,v^2);
 for i = 1:v
     Q((i-1) * v + 1:(i-1) * v + v,(i-1) * v + 1:(i-1) * v + v) =c;
 end
-for i = 1:v-1
-    Q(i*v+1:i*v+v,(i-1)*v+1:(i-1)*v+v) = c/2;
-    Q((i-1)*v+1:(i-1)*v+v,i*v+1:i*v+v) = c/2;
+for i = 1:v-((k-1)+1)
+    Q(i*v+v*(k-1)+1:i*v+v*(k-1)+v,(i-1)*v+1:(i-1)*v+v) = c/2;
+    Q((i-1)*v+1:(i-1)*v+v,i*v+v*(k-1)+1:i*v+v*(k-1)+v) = c/2;
 end
+% 
+% Q((v-1)*v + 1:(v-1)*v + v,1:v) = c/2;
+% Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c/2;
 
-Q((v-1)*v + 1:(v-1)*v + v,1:v) = c/2;
-Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c/2;
+for i = 1:k
+    Q((v-(k-i+1))*v +1:(v-(k-i+1))*v +v,(i-1)*v+1:(i-1)*v+v) = c/2;
+    Q((i-1)*v+1:(i-1)*v+v,(v-(k-i+1))*v +1:(v-(k-i+1))*v +v) = c/2;
+    
+end
 
 
 
