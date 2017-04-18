@@ -93,18 +93,14 @@ end
 bperm = ones(size(Aperm,1),1);
 
 % generate d's
-
-for l = 1:length(d)
-    for i = 1:size(c,1)
-%         dRC = [dRC;d];
-        for j = 1:size(c,2)
-            if i <=l
-                Acap(l,i+(j-1)*size(c,1)) = d(j);
-            else
-                Acap(l,i+(j-1)*size(c,1)) = 0;
-            end
-        end
+d_tmp = repmat(d,v,1)';
+z_tmp = zeros(size(d_tmp));
+for i = 1:v
+    zi = z_tmp;
+    for j = 1:i
+        zi(1,(j-1)*v+1:j*v) = ones(1,v);
     end
+    Acap(i,:) = d_tmp.*zi;
 end
 
 bcap = ones(size(Acap,1),1)*k;
@@ -130,23 +126,30 @@ end
 
 N = 1:1:2*n+1;
 Apre = zeros(size(eini,1),v*v);
-ApreN = repmat(N,1,v);
-% for l = 1:size(eini,1)
-%     m = 0;
-%     for i = 1:size(eini,2)
-%         for j =1:length(N)
-%             m = m+1;
-%             Apre(l,m) = eini(l,i)*N(1,j);
-%         end
-% 
-%     end
-% end
-einit = [];
+einit = repmat(eini,1,v);
+Nmat = [];
 for i = 1:v
-    einil = repmat(eini(:,i),1,v);
-    einit = [einit einil];
+    Nmat = [Nmat repmat(i,1,v)];
 end
-Apre = einit.*repmat(ApreN,size(eini,1),1);
+NmatR = repmat(Nmat,size(eini,1),1);
+% ApreN = repmat(N,1,v);
+% % for l = 1:size(eini,1)
+% %     m = 0;
+% %     for i = 1:size(eini,2)
+% %         for j =1:length(N)
+% %             m = m+1;
+% %             Apre(l,m) = eini(l,i)*N(1,j);
+% %         end
+% % 
+% %     end
+% % end
+% einit = [];
+% for i = 1:v
+%     einil = repmat(eini(:,i),1,v);
+%     einit = [einit einil];
+% end
+Apre = einit.*NmatR;
+% Apre = einit.*repmat(ApreN,size(eini,1),1);
 bpre = zeros(size(Apre,1),1);
 
 %% interger programming....
@@ -158,7 +161,11 @@ beq = [bperm;1];
 % bieq = [bcap;bpre];
 
 x = binvar(v^2,1);
-F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
+X = reshape(x,v,v);
+% F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
+L = tril(ones(v,v));
+
+F = [L*X*d <= k*ones(v,1)]
 % F = [];
 
 bz = zeros(v,v);
@@ -182,7 +189,7 @@ optimize(F,obj,ops)
 
 % generate the optimal tour from x
 solution = reshape(value(x),[size(c,1),size(c,2)]);
-% tour = round(solution*[1:v]');
+tour = round(solution*[1:v]');
 tour = [1;tour];
 
 

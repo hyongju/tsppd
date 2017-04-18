@@ -1,8 +1,8 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 3;             % number of custumers(n)
-k = 2;              % capacity    
+n = 5;             % number of custumers(n)
+k = 3;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
@@ -162,7 +162,18 @@ bcapzero = zeros(size(bcap));
 x = binvar(v^2,1);
 X = reshape(x,v,v)';
 xx = reshape(X,v^2,1);
-F = [Acap*xx <=bcap, Apre * xx <= bpre, X * ones(v,1)==ones(v,1),X'*ones(v,1) == ones(v,1),X(v,1) == 1];
+
+% F = [Acap*xx <=bcap, Apre * xx <= bpre, X * ones(v,1)==ones(v,1),X'*ones(v,1) == ones(v,1),X(v,1) == 1];
+F = [];
+F = [F,tril(ones(v,v))*X*d <= k];
+F = [F, X * ones(v,1)==ones(v,1),X'*ones(v,1) == ones(v,1),X(v,1) == 1];
+N = 1:1:v;
+for i = 1:n
+    eini = zeros(1,v);
+    eini(i+1) = 1;
+    eini(i+n+1) = -1;
+    F = [F,N*X*eini' <= 0];
+end
 % F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
 

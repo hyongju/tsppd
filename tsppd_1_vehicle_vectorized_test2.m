@@ -95,15 +95,9 @@ bperm = ones(size(Aperm,1),1);
 % generate d's
 d_tmp = repmat(d,v,1)';
 z_tmp = zeros(size(d_tmp));
-for i = 1:v
-    zi = z_tmp;
-    for j = 1:i
-        zi(1,(j-1)*v+1:j*v) = ones(1,v);
-    end
-    Acap(i,:) = d_tmp.*zi;
-end
 
-bcap = ones(size(Acap,1),1)*k;
+
+% bcap = ones(size(Acap,1),1)*k;
 
 % tour needs to end at node 1...
 
@@ -153,7 +147,11 @@ beq = [bperm;1];
 % Aieq = [Acap;Apre];
 % bieq = [bcap;bpre];
 
+% x = binvar(v^2,1);
 x = binvar(v^2,1);
+X = reshape(x,v,v)';
+xx = reshape(X,v^2,1);
+F = [Acap*xx <=bcap, Apre * xx < bpre, Aeq*xx == beq];
 F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
 
@@ -178,7 +176,7 @@ optimize(F,obj,ops)
 
 % generate the optimal tour from x
 solution = reshape(value(x),[size(c,1),size(c,2)]);
-tour = round(solution'*[1:v]');
+tour = round(solution*[1:v]');
 tour = [1;tour];
 
 

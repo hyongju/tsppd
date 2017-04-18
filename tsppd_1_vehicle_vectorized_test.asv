@@ -1,8 +1,8 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 3;             % number of custumers(n)
-k = 2;              % capacity    
+n = 3 ;             % number of custumers(n)
+k = 1;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
@@ -10,7 +10,7 @@ alph = 1;
 % pick-up nodes: 2,...,n+1
 % delivery nodes: n+2,...,2n+1
 vert = rand(2*n+1,2);
-% load('matlab.mat');
+load('matlab.mat');
 v = 2*n + 1;        % number of vertices |V| = 2n + 1
 
 % cost matrix (c)
@@ -42,7 +42,7 @@ A0 = [A0(2:2*n+1,:);A0(1,:)] + alph*eye(v); % added identity to prevent zeros fr
 
 
 % d(i) = +1 (pickup), -1 (deliver)
-d = [0;ones(n,1);-ones(n,1)];
+d = [ones(n,1);-ones(n,1);0];
 
 % constraint #1: permutation
 
@@ -124,12 +124,12 @@ Atend = reshape(Ate,size(c,2)*size(c,1),1)';
 % constraint #2 (precedence), eini = ei - en+1
 for i = 1:n
     eini(i,:) = zeros(1,v);
-    eini(i,i+1) = 1;
-    eini(i,i+n+1) = -1;
+    eini(i,i) = 1;
+    eini(i,i+n) = -1;
 end
 
 N = 1:1:2*n+1;
-% N = [N(1,2:2*n+1),1];
+N = [N(1,2:2*n+1),1];
 Apre = zeros(size(eini,1),v*v);
 ApreN = repmat(N,1,v);
 % for l = 1:size(eini,1)
@@ -162,7 +162,7 @@ bcapzero = zeros(size(bcap));
 x = binvar(v^2,1);
 X = reshape(x,v,v)';
 xx = reshape(X,v^2,1);
-F = [Acap*xx <=bcap, Apre * xx <= bpre, X * ones(v,1)==ones(v,1),X'*ones(v,1) == ones(v,1),X(v,1) == 1];
+F = [Acap*xx <=bcap, Apre * xx <= bpre, X * ones(v,1)==ones(v,1),X'*];
 % F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
 
