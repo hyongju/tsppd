@@ -10,7 +10,7 @@ alph = 1;
 % pick-up nodes: 2,...,n+1
 % delivery nodes: n+2,...,2n+1
 vert = rand(2*n+1,2);
-load('matlab.mat');
+% load('matlab.mat');
 v = 2*n + 1;        % number of vertices |V| = 2n + 1
 
 % cost matrix (c)
