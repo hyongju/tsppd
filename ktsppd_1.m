@@ -175,3 +175,6 @@ set(gca,'FontSize',16);
 % set(gca,'FontSize',16);
 % xlabel('custumer ID');
 % ylabel('precedence')
+
+
+spy(Q)

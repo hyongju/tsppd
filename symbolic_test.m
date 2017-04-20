@@ -1,12 +1,12 @@
 clear all;close all;clc
-n = 7;                  % number of customers: (n-1)/2
+n = 9;                  % number of customers: (n-1)/2
 C = sym('C',[n n],'real');
 X = sym('X',[n n],'real');
 A0 = eye(n);
 alph = 1;
-A0 = [A0(3:n,:);A0(1:2,:)]+alph*eye(n);
+A0 = [A0(4:n,:);A0(1:3,:)]+alph*eye(n);
 A0=sym(A0);
-Q = expand(sum(sum(C.*(X'*A0*X))));
+Q = expand(sum(sum(C.*(X*A0*X'))));
 
 
 N=jacobian(jacobian(Q,reshape(X,n*n,1)),reshape(X,n*n,1));
