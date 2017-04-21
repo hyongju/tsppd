@@ -1,8 +1,9 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-k = 5;
-n = 10;             % number of custumers(n) this needs to be divisible by the number k
+addpath(genpath('/opt/'));
+k = 2;
+n = 6;             % number of custumers(n) this needs to be divisible by the number k
 q = 3;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
@@ -51,7 +52,7 @@ d = [zeros(k,1);ones(n,1);-ones(n,1)];
 x = binvar(v^2,1);
 X = reshape(x,v,v)';
 xx = reshape(X,v^2,1);
-y = intvar(v,1);
+%y = intvar(v,1);
 % F = [Acap*xx <=bcap, Apre * xx <= bpre, X * ones(v,1)==ones(v,1),X'*ones(v,1) == ones(v,1),X(v,1) == 1];
 F = [];
 Lt = tril(ones(v,v));
@@ -75,7 +76,7 @@ for i = 1:n
     eini(i+k) = 1;
     eini(i+n+k) = -1;
     F = [F,N*X*eini' <= 0];
-    F = [F,N*X*eini' == y(i)*k];
+%    F = [F,N*X*eini' == y(i)*k];
 end
 % F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
 % F = [];
