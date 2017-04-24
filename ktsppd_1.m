@@ -1,8 +1,8 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-k = 5;
-n = 10;             % number of custumers(n) this needs to be divisible by the number k
+k = 1;
+n = 7;             % number of custumers(n) this needs to be divisible by the number k
 q = 3;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
