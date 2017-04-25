@@ -2,7 +2,7 @@
 clear all;close all;clc
 
 k = 1;
-n = 5;             % number of custumers(n) this needs to be divisible by the number k
+n = 10;             % number of custumers(n) this needs to be divisible by the number k
 q = 5;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 0.6;

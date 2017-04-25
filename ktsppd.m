@@ -1,11 +1,12 @@
-% TSPPD (1-vehicle, 1-depot)
+% kPDTSP (k-vehicle, k-depot)
 clear all;close all;clc
 
-k = 5;
-n = 10;             % number of custumers(n) this needs to be divisible by the number k
+k = 1;
+n = 5;             % number of custumers(n) this needs to be divisible by the number k
 q = 3;              % capacity    
 rng('shuffle');     % random seed: shuffle
-alph = 1;
+alph = 0.6;
+beta = 1.1;
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
 % vehicle node: 1
 % pick-up nodes: 2,...,n+1
@@ -24,26 +25,40 @@ end
 % c = c + eye(v); % add identity to prevent zeros from appearing in the diagonal
 
 % make c PSD...
-
 for i = 1:size(c,1)
     sum_c(i) = 0;
     for j = 1:size(c,2)
         sum_c(i) = sum_c(i) + abs(c(i,j));
     end
-    c(i,i) = c(i,i) + sum_c(i);
+    c(i,i) = c(i,i) + beta * sum_c(i);
     cM(i) = c(i,i);
 end
-% for i = 1:size(c,1)
-%     c(i,i) = max(cM);
-% end
 all(eig(c)>=0)  % check if c is PSD
 % adjacency matrix for a default tour: 1->2->3->..->2n->2n+1
 A0 = eye(2*n+k);
 A0 = [A0(k+1:2*n+k,:);A0(1:k,:)] + alph*eye(v); % added identity to prevent zeros from appearing in the diagonal
 
-
 % d(i) = +1 (pickup), -1 (deliver)
 d = [zeros(k,1);ones(n,1);-ones(n,1)];
+
+Q = zeros(v^2,v^2);
+for i = 1:v
+    Q((i-1) * v + 1:(i-1) * v + v,(i-1) * v + 1:(i-1) * v + v) = c;
+end
+for i = 1:v-((k-1)+1)
+    Q(i*v+v*(k-1)+1:i*v+v*(k-1)+v,(i-1)*v+1:(i-1)*v+v) = c/2;
+    Q((i-1)*v+1:(i-1)*v+v,i*v+v*(k-1)+1:i*v+v*(k-1)+v) = c/2;
+end
+
+for i = 1:k
+    Q((v-(k-i+1))*v +1:(v-(k-i+1))*v +v,(i-1)*v+1:(i-1)*v+v) = c/2;
+    Q((i-1)*v+1:(i-1)*v+v,(v-(k-i+1))*v +1:(v-(k-i+1))*v +v) = c/2;
+end
+
+all(eig(Q)>0)
+figure,
+spy(Q)
+% TASK I: VECTORIZE CONSTRAINTS....
 
 %% interger programming....
 
@@ -57,7 +72,7 @@ F = [];
 Lt = tril(ones(v,v));
 for i = 1:k
     L{i} = zeros(v,v);
-    for j = 1:n
+    for j = 1:floor((v-i)/k)+1
         i;
         L{i}((j-1)*k+i,:) = Lt(j,:);
     end
@@ -77,28 +92,6 @@ for i = 1:n
     F = [F,N*X*eini' <= 0];
     F = [F,N*X*eini' == y(i)*k];
 end
-% F = [Acap*x <=bcap, Apre * x < bpre, Aeq*x == beq];
-% F = [];
-
-Q = zeros(v^2,v^2);
-for i = 1:v
-    Q((i-1) * v + 1:(i-1) * v + v,(i-1) * v + 1:(i-1) * v + v) =c;
-end
-for i = 1:v-((k-1)+1)
-    Q(i*v+v*(k-1)+1:i*v+v*(k-1)+v,(i-1)*v+1:(i-1)*v+v) = c/2;
-    Q((i-1)*v+1:(i-1)*v+v,i*v+v*(k-1)+1:i*v+v*(k-1)+v) = c/2;
-end
-% 
-% Q((v-1)*v + 1:(v-1)*v + v,1:v) = c/2;
-% Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c/2;
-
-for i = 1:k
-    Q((v-(k-i+1))*v +1:(v-(k-i+1))*v +v,(i-1)*v+1:(i-1)*v+v) = c/2;
-    Q((i-1)*v+1:(i-1)*v+v,(v-(k-i+1))*v +1:(v-(k-i+1))*v +v) = c/2;
-    
-end
-
-
 
 obj =x'*Q*x;
 ops = sdpsettings('verbose',1);
@@ -177,4 +170,3 @@ set(gca,'FontSize',16);
 % ylabel('precedence')
 
 
-spy(Q)

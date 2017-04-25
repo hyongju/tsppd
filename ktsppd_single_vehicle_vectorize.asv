@@ -60,6 +60,9 @@ figure,
 spy(Q)
 % TASK I: VECTORIZE CONSTRAINTS....
 
+
+
+
 %% interger programming....
 
 
@@ -72,9 +75,13 @@ F = [];
 Lt = tril(ones(v,v));
 for i = 1:k
     L{i} = zeros(v,v);
-    for j = 1:floor((v-i)/k)+1
+    if k >=2
+    for j = 1:n+1
         i;
         L{i}((j-1)*k+i,:) = Lt(j,:);
+    end
+    else
+        L{i} = 
     end
 end
 for i = 1:length(L)
