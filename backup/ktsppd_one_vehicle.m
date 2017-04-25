@@ -1,9 +1,14 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
+<<<<<<< HEAD:backup/ktsppd_one_vehicle.m
 addpath(genpath('/opt/'));
 k = 2;
 n = 6;             % number of custumers(n) this needs to be divisible by the number k
+=======
+k = 1;
+n = 7;             % number of custumers(n) this needs to be divisible by the number k
+>>>>>>> 69ec65c89a2a1c7904ed7f974ebe1703db9a4121:ktsppd_1.m
 q = 3;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
