@@ -2,8 +2,8 @@
 clear all;close all;clc
 
 k = 1;
-n = 10;             % number of custumers(n) this needs to be divisible by the number k
-q = 5;              % capacity    
+n = 3;             % number of custumers(n) this needs to be divisible by the number k
+q = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 0.6;
 beta = 1.1;
@@ -160,4 +160,4 @@ set(gca,'FontSize',16);
 % xlabel('custumer ID');
 % ylabel('precedence')
 
-
+figure,spy(value(x)*value(x)')

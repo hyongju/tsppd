@@ -1,9 +1,9 @@
 % kPDTSP (k-vehicle, k-depot)
 clear all;close all;clc
 
-k = 3;
+k = 1;
 n = 6;             % number of custumers(n) this needs to be divisible by the number k
-q = 2;              % capacity    
+q = 6;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 0.6;
 beta = 1.1;
@@ -167,7 +167,7 @@ set(findall(h1, 'Type', 'Text'),'FontWeight', 'Normal')
 % plot constraint#1
 for i = 1:k
     h2 = figure('position',[100 100 800 600],'Color',[1 1 1]);
-    rst = L{i}*value(X)*d;
+    rst = L{i}*X_IP*d;
     bldLst = [];
     for j = 1:floor((v-i)/k)+1
         bldLst = [bldLst,(j-1)*k+i];
@@ -190,7 +190,7 @@ for l = 1:n
     eini = zeros(1,v);    
     eini(l+k) = 1;
     eini(l+n+k) = -1;        
-    rst(l) = N*value(X)*eini';
+    rst(l) = N*X_IP*eini';
 end
 
 plot(1:n,rst,'bo-','MarkerSize',10,'LineWidth',2);
@@ -204,7 +204,7 @@ set(findall(h3, 'Type', 'Text'),'FontWeight', 'Normal')
 
 
 h4 = figure('position',[100 100 800 600],'Color',[1 1 1]);
-plot(1:n,-rst/k,'rs','MarkerSize',16,'LineWidth',2);
+plot(1:n,-rst/k,'bo','MarkerSize',10,'LineWidth',2);
 xlabel('customer ID')
 ylabel('association (must be integer)')
 set(gca,'FontSize',16);

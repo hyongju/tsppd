@@ -1,7 +1,7 @@
 % kPDTSP (k-vehicle, k-depot)
 clear all;close all;clc
 
-k = 3;
+k = 1;
 n = 6;             % number of custumers(n) this needs to be divisible by the number k
 q = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
@@ -166,7 +166,7 @@ set(findall(h1, 'Type', 'Text'),'FontWeight', 'Normal')
 % 
 % plot constraint#1
 for i = 1:k
-    h2 = figure('position',[100 100 800 600],'Color',[1 1 1]);
+    h2 = figure('position',[100 100 600 600],'Color',[1 1 1]);
     rst = L{i}*value(X)*d;
     bldLst = [];
     for j = 1:floor((v-i)/k)+1
@@ -179,17 +179,17 @@ for i = 1:k
     set(gca,'FontSize',16);
     xlabel('sequence');
     ylabel('# of customers in the vehicle')
-    title(sprintf('vehicle #%d, capacity: %d',i,q))
-    set(findall(h2, 'Type', 'Text'),'FontWeight', 'Normal')
+    title(sprintf('vehicle #%d',i))
+set(findall(h2, 'Type', 'Text'),'FontWeight', 'Normal')
     
 end
 % plot constraint#2
 clear rst
-h3 = figure('position',[100 100 800 600],'Color',[1 1 1]);
+figure,
 for l = 1:n
     eini = zeros(1,v);    
-    eini(l+k) = 1;
-    eini(l+n+k) = -1;        
+    eini(i+k) = 1;
+    eini(i+n+k) = -1;        
     rst(l) = N*value(X)*eini';
 end
 
@@ -199,17 +199,13 @@ hold on;
 line([0 n],[0,0],'Color','r','LineWidth',2);
 set(gca,'FontSize',16);
 xlabel('customer ID');
-ylabel('precedence (must be non-positive)')
-set(findall(h3, 'Type', 'Text'),'FontWeight', 'Normal')
+ylabel('precedence')
 
-
-h4 = figure('position',[100 100 800 600],'Color',[1 1 1]);
-plot(1:n,-rst/k,'rs','MarkerSize',16,'LineWidth',2);
+figure,
+plot(1:n,-rst/k,'bo','MarkerSize',10,'LineWidth',2);
 xlabel('customer ID')
-ylabel('association (must be integer)')
+ylabel('association (integer)')
 set(gca,'FontSize',16);
-set(findall(h4, 'Type', 'Text'),'FontWeight', 'Normal')
-
 % figure,
 % out = Apre*value(xx);
 % 
