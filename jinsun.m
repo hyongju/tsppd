@@ -15,9 +15,10 @@ load('matlab.mat');
 v = 2*n + 1;        % number of vertices |V| = 2n + 1
 
 constr = [];
-% x = binvar(v^2,1);
-x = sdpvar(v^2,1);
-constr = [constr; 0<=x<=1];
+x = binvar(v^2,1);
+% x = sdpvar(v^2,1);
+% constr = [constr; 0<=x<=1];
+
 X = [];
 for i = 1:v,
     X = [X,x(v*i-v+1:v*i)];
@@ -94,8 +95,8 @@ end
 % constraint: goes back to node 1 in the end
 constr = [constr; X(v,1)==1];
 
-ops = sdpsettings('verbose',1,'solver','mosek');
-% ops = sdpsettings('verbose',1);
+% ops = sdpsettings('verbose',1,'solver','mosek');
+ops = sdpsettings('verbose',1);
 optimize(constr,obj,ops)
 solution = value(X)
 tour = round(solution*[1:v]');
@@ -136,28 +137,6 @@ end
 axis('equal');
 axis([0 1 0 1]);
 set(gca,'FontSize',16);
-
-% % plot constraint#1
-% figure,
-% plot(1:v,Acap*value(x),'bo-','MarkerSize',10,'LineWidth',2);
-% hold on;
-% line([0 v],[k,k],'Color','r','LineWidth',2);
-% set(gca,'FontSize',16);
-% xlabel('sequence');
-% ylabel('# of customers in the vehicle')
-% 
-% % plot constraint#2
-% figure,
-% out = Apre*value(x);
-% 
-% plot(1:n,out,'s-b','MarkerSize',10,'LineWidth',2);
-% line([0 n],[0,0],'Color','r','LineWidth',2);
-% set(gca,'FontSize',16);
-% xlabel('custumer ID');
-% ylabel('precedence')
-% 
-% 
-
 
 
 

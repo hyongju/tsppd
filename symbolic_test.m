@@ -7,9 +7,13 @@ alph = 1;
 A0 = [A0(2:n,:);A0(1,:)]+alph*eye(n);
 A0=sym(A0);
 Q = expand(sum(sum(C.*(X*A0*X'))));
-
-
 N=jacobian(jacobian(Q,reshape(X,n*n,1)),reshape(X,n*n,1));
+figure,spy(N)
+
+Q = expand(sum(sum(C.*(X'*A0*X))));
+N=jacobian(jacobian(Q,reshape(X,n*n,1)),reshape(X,n*n,1));
+figure,spy(N)
+
 
 % var11 = repmat((1:n)',n,1);
 % var12 = repmat((1:n)',1,n);
@@ -29,13 +33,13 @@ N=jacobian(jacobian(Q,reshape(X,n*n,1)),reshape(X,n*n,1));
 %     end
 % end
 
-for i = 1:10
-    rng('shuffle');
-    rndsd = rand(n);
-    symMat = rndsd'*rndsd;          % artificially created positive definite matrix...
-    M = subs(N,C,symMat);
-    dM = double(M);
-    psd(i) = all(round(eig(dM),5) >= 0);    % check if the matrix is PSD...
-end
-
-length(find(psd)) % ? out of 10 is PSD...
+% for i = 1:10
+%     rng('shuffle');
+%     rndsd = rand(n);
+%     symMat = rndsd'*rndsd;          % artificially created positive definite matrix...
+%     M = subs(N,C,symMat);
+%     dM = double(M);
+%     psd(i) = all(round(eig(dM),5) >= 0);    % check if the matrix is PSD...
+% end
+% 
+% length(find(psd)) % ? out of 10 is PSD...
