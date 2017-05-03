@@ -1,9 +1,9 @@
 % kPDTSP (k-vehicle, k-depot)
 clear all;close all;clc
 
-k = 1;
+k = 2;
 n = 6;             % number of custumers(n) this needs to be divisible by the number k
-q = 6;              % capacity    
+q = 1;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 0.6;
 beta = 1.1;
@@ -113,6 +113,42 @@ tour = round(solution*[1:v]');
 tour = [1:k, tour']
 
 
+
+h0 = figure('position',[100 100 800 800],'Color',[1 1 1]);
+plot(vert(:,1),vert(:,2),'ok','MarkerSize',10,'LineWidth',2); hold on;
+hold on;
+plot(vert(1:k,1),vert(1:k,2),'ob','MarkerSize',14,'LineWidth',2); hold on;
+
+
+for i = 1:size(vert,1)
+    if (mod(i-k,n)) == 0 && i > k
+        prtVal = n;
+    elseif i <= k
+        prtVal = i;
+    else
+        prtVal = mod(i-k,n);
+    end
+    if i <=k
+        str = 'S';
+        col = 'black';
+    elseif i <= n+k
+        str = 'P';
+        col = 'red';
+    else
+        str = 'D';
+        col = 'blue';
+    end
+    text(vert(i,1)+0.02,vert(i,2)+0.02, sprintf('%.0f %s',prtVal,str),'Color',sprintf('%s',col),'FontSize',16);
+end
+
+axis('equal');
+axis([0 1 0 1]);
+set(gca,'FontSize',16);
+title(sprintf('# of customers: %d, # of vehicles: %d, capacity: %d',n,k,q));
+set(findall(h0, 'Type', 'Text'),'FontWeight', 'Normal')
+
+
+
 % draw graph, and optimal tour
 h1 = figure('position',[100 100 800 800],'Color',[1 1 1]);
 plot(vert(:,1),vert(:,2),'ok','MarkerSize',10,'LineWidth',2); hold on;
@@ -204,7 +240,7 @@ set(findall(h3, 'Type', 'Text'),'FontWeight', 'Normal')
 
 
 h4 = figure('position',[100 100 800 600],'Color',[1 1 1]);
-plot(1:n,-rst/k,'bo','MarkerSize',10,'LineWidth',2);
+plot(1:n,-rst/k,'rs','MarkerSize',16,'LineWidth',2);
 xlabel('customer ID')
 ylabel('association (must be integer)')
 set(gca,'FontSize',16);
