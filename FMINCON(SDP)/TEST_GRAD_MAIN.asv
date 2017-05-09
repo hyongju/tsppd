@@ -35,6 +35,11 @@ function [ ] = TEST_GRAD_MAIN( cost,constr,v )
             end
         end
     end
+    
+    disp('testing eigenvalue constraint');
+    temp = @(x)eig_constr_gene_fun(x,v,v+1);
+    res = grad_test(temp,v+v+1);
+    
     disp('finish testing constraints.');
     disp('test gradients: END.');
 

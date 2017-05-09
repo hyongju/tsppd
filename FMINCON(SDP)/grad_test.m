@@ -14,7 +14,7 @@ function [ res ] = grad_test( func, n, points )
         error('func and n must be specified.');
     end
     if ~exist('points', 'var') || isempty(points) % if no points given, randomly genarate 100 points
-        points = 1*rand(n,100)-0;
+        points = 10*rand(n,1000)-0;
     end
     if size(points,1)~=n,
        error('the number of rows in points must be n'); 
@@ -42,7 +42,8 @@ function [ res ] = grad_test( func, n, points )
           
           % check if the gradf is correct
           gradf_est = (f_ph-f_mh)/2/h;
-          if abs(gradf_est-gradf(j))>thres,
+          gradf_est-gradf(j,:)';
+          if sum(abs(gradf_est-gradf(j,:)')>thres)~=0,
               disp(['gradf fails at point trans([',num2str(x'),'])'])
               res = 0;
               break;

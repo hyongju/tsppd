@@ -2,7 +2,7 @@
 % TSPPD (1-vehicle, 1-depot)
 clear all;close all;clc
 
-n = 5 ;             % number of custumers(n)
+n = 3 ;             % number of custumers(n)
 k = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 1;
@@ -197,7 +197,7 @@ ops = sdpsettings('verbose',1,'solver','mosek');
 optimize(constr,obj,ops);
 
 disp('========================================')
-obj_SDR = value(obj)
+obj_SDP = value(obj)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % extraction no.0 (invalid solution)
 solution = value(X);

@@ -102,7 +102,7 @@ constr.eq.B{2} = ones(v,1);
 % constraint reads: L*X*d<=k*ones(v,1)
 temp = zeros(v,v^2);
 for i = 1:v,
-   temp(1,1:i*v) = repmat(para.d',1,i); 
+   temp(i,1:i*v) = repmat(para.d',1,i); 
 end
 constr.ineq.A{1} = temp;
 constr.ineq.B{1} = k*ones(v,1);
