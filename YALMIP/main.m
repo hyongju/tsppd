@@ -11,10 +11,10 @@ else
     load(file);
 end
 [ para,constr ] = pre_process( n,k,vert);
-x = sdpvar(v^2,1);
+x = binvar(v^2,1);
 constraint = [];
-% obj = x'*para.Q*x;
-obj = trace(para.Q*x*x');
+obj = x'*para.Q*x;
+% obj = trace(para.Q*x*x');
 
 for i = 1:length(constr.eq.A),
 %    constraint = [constraint;constr.eq.A{i}*(x.^2)==constr.eq.B{i}]; 
@@ -30,16 +30,17 @@ M = [1 x'.^2;x.^2,x*x'];
 % ops = sdpsettings('verbose',1,'solver','fminsdp');
 ops = sdpsettings('verbose',1);
 optimize(constraint,obj,ops)
-solution = value(x)
+solution = value(x);
+solution_as_perm = reshape(solution,v,v)'
 
-% X_real = [     0     0     0     0     0     1     0     0     0     0     0;
-%                0     0     0     0     0     0     0     0     0     0     1;
-%                0     0     1     0     0     0     0     0     0     0     0;
-%                0     0     0     0     0     0     0     1     0     0     0;
-%                0     0     0     1     0     0     0     0     0     0     0;
-%                0     1     0     0     0     0     0     0     0     0     0;
-%                0     0     0     0     0     0     1     0     0     0     0;
-%                0     0     0     0     0     0     0     0     1     0     0;
-%                0     0     0     0     1     0     0     0     0     0     0;
-%                0     0     0     0     0     0     0     0     0     1     0;
-%                1     0     0     0     0     0     0     0     0     0     0];
+X_real = [     0     0     0     0     0     1     0     0     0     0     0;
+               0     0     0     0     0     0     0     0     0     0     1;
+               0     0     1     0     0     0     0     0     0     0     0;
+               0     0     0     0     0     0     0     1     0     0     0;
+               0     0     0     1     0     0     0     0     0     0     0;
+               0     1     0     0     0     0     0     0     0     0     0;
+               0     0     0     0     0     0     1     0     0     0     0;
+               0     0     0     0     0     0     0     0     1     0     0;
+               0     0     0     0     1     0     0     0     0     0     0;
+               0     0     0     0     0     0     0     0     0     1     0;
+               1     0     0     0     0     0     0     0     0     0     0];
