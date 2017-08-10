@@ -17,4 +17,7 @@ function [ f,gradf ] = quadcost( x,Q,real_length )
        gradf = [gradf;zeros(length(x)-real_length,1)];
     end
 
+    reshape(x(1:real_length),sqrt(real_length),sqrt(real_length))'
+    f
+    
 end

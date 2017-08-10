@@ -74,7 +74,7 @@ function [ para,constr ] = pre_process( n,k,vert,c,alpha)
 %%%%%%%%%%%%%%%%%%%%%%  END OF PART ONE  %%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%  PART TWO: constr %%%%%%%%%%%%%%%%%%%%%%%%%
-% There are four linear constraints for the single vehicle case.
+% There are 5 linear constraints for the single vehicle case.
 
 % 1st & 2nd: the solution we are aiming for is a permutation matrix X, thus
 % we need constraints: ones(1,v)*X=ones(1,v) and X*ones(v,1)=ones(v,1).
@@ -99,7 +99,7 @@ constr.eq.B{2} = ones(v,1);
 
 % 3rd: the 3rd one is for capacity constraint, which says that at any time,
 % there should not be more than k custumers in the vehicle. The original
-% constraint reads: 0<=L*X*d<=k*ones(v,1)
+% constraint reads: L*X*d<=k*ones(v,1)
 temp = zeros(v,v^2);
 for i = 1:v,
    temp(i,1:i*v) = repmat(para.d',1,i); 
@@ -115,6 +115,14 @@ for i = 1:v,
     temp = [temp,zeros(n,1),i*eye(n),-i*eye(n)];
 end
 constr.ineq.A{2} = temp;
-constr.ineq.B{2} = -1*ones(n,1);
+constr.ineq.B{2} = zeros(n,1);
+
+
+%5th: the 5th one is to ensure that the tour ends at the first vertex of
+%the map.
+constr.eq.A{3} = zeros(1,v^2,1);
+constr.eq.A{3}(v^2-v+1) = 1;
+constr.eq.B{3} = 1;
+
 %%%%%%%%%%%%%%%%%%%%%%  END OF PART TWO  %%%%%%%%%%%%%%%%%%%%%%%%%
 end
