@@ -96,7 +96,7 @@ constr = [constr; X(v,1)==1];
 % ops = sdpsettings('verbose',1,'solver','mosek');
 ops = sdpsettings('verbose',0);
 optimize(constr,obj,ops)
-obj_IQP = value(obj)
+obj_IQP = value(obj) - c(1,1)*v
 solution_IQP = value(X)
 tour = round(solution_IQP*[1:v]');
 tour = [1;tour];
@@ -146,7 +146,7 @@ B = sdpvar(v+1,1);B(1)=0;   % decision variable for begining of service at each 
 % construct map of t_ij (travel time from vertex i to j)
 t = c; % here we assume the vehicle always travels with constant speed 1
 for i = 1:v+1,
-    if 2<=i && i<=n,
+    if 2<=i && i<=n+1,
         constr1 = [constr1;B(i)<=B(n+i)];
     end
     for j = 1:v+1,
