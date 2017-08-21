@@ -1,7 +1,7 @@
 % iqp vs ilp
 clear all,close all,clc;
 
-n = 5 ;             % number of custumers(n)
+n = 7 ;             % number of custumers(n)
 k = 2;              % capacity   
 v = 2*n+1;
 
@@ -94,7 +94,7 @@ end
 constr = [constr; X(v,1)==1];
 
 % ops = sdpsettings('verbose',1,'solver','mosek');
-ops = sdpsettings('verbose',0);
+ops = sdpsettings('verbose',0,'solver','cplex');
 optimize(constr,obj,ops)
 obj_IQP = value(obj) - c(1,1)*v
 solution_IQP = value(X)
@@ -143,6 +143,7 @@ end
 
 % precedence constraint
 B = sdpvar(v+1,1);B(1)=0;   % decision variable for begining of service at each vertex
+dd = 0.1*ones(size(B));
 % construct map of t_ij (travel time from vertex i to j)
 t = c; % here we assume the vehicle always travels with constant speed 1
 for i = 1:v+1,
@@ -151,7 +152,7 @@ for i = 1:v+1,
     end
     for j = 1:v+1,
         if ~isnumeric(x(i,j)),
-           constr1 = [constr1;implies(x(i,j),B(j)>=B(i)+t(i,j))]; 
+           constr1 = [constr1;implies(x(i,j),B(j)>=B(i)+t(i,j)+dd(i))]; 
         end
     end
 end
@@ -162,7 +163,7 @@ obj1 = sum(sum(c.*x));
 
 optimize(constr1,obj1,ops)
 obj_ILP = value(obj1)
-solution_ILP = value(x)
+solution_ILP = round(value(x))
 % construct tour
 next = 1;
 tour1 = 1;
