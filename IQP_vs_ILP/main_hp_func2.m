@@ -105,7 +105,8 @@ ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0
 % ops.cplex.mip.limits.nodes=400; 
 % ops.cplex.mip.strategy.search=1;
 % ops.cplex.mip.strategy.bbinterval=1;
-ops.cplex.mip.tolerances.absmipgap=appx;
+ops.cplex.mip.tolerances.mipgap=appx;
+% ops.cplex.mip.tolerances.absmipgap=appx;
 % ops.cplex.mip.preprocessing.presolve=0;
 ops.cplex.display = 'on';
 outputIQP = optimize(constr,obj,ops)
@@ -127,6 +128,7 @@ c(:,end) = temp';
 
 % generate decision variable x that in A. Here # of x is larger than # of
 % elements in A, but those extra elements are set to be 0s.
+clear x
 x = binvar(v+1,v+1,'full');
 x(v+1,:) = zeros(1,v+1);
 x(:,1) = zeros(v+1,1);
@@ -134,9 +136,10 @@ for i = 1:v+1,
     x(i,i) = 0;
 end
 % x;
+y = sdpvar(1);
 
 % set constraints
-constr1 = [];
+constr1 = [y == c(1,1)*v];
 for i = 1:v,
     constr1 = [constr1; sum(x(:,i+1)) == 1]; % constraints w.r.t. (2)
     constr1 = [constr1; sum(x(i,:)) == 1];   % constraints w.r.t. (3)
@@ -176,10 +179,10 @@ end
 % construct object function
 assign(x,init_ILP);
 
-obj1 = sum(sum(c.*x));
+obj1 = sum(sum(c.*x)) + y;
 
 outputILP = optimize(constr1,obj1,ops)
-obj_ILP = value(obj1);
+obj_ILP = value(obj1)-value(y);
 solution_ILP = round(value(x));
 % construct tour
 next = 1;
