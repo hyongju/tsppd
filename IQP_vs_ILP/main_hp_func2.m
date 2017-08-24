@@ -63,7 +63,7 @@ end
 
 Q((v-1)*v + 1:(v-1)*v + v,1:v) = c/2;
 Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c/2;
-assign(X,init_IQP);
+assign(x,reshape(init_IQP',[],1));
 obj = x'*Q*x;
 
 % d(i) = +1 (pickup), -1 (deliver)
@@ -132,15 +132,18 @@ clear x
 x = binvar(v+1,v+1,'full');
 x(v+1,:) = zeros(1,v+1);
 x(:,1) = zeros(v+1,1);
-for i = 1:v+1,
-    x(i,i) = 0;
-end
+% for i = 1:v+1,
+%     x(i,i) = 0;
+% end
 % x;
 y = sdpvar(1);
 
 % set constraints
 constr1 = [y == c(1,1)*v];
 for i = 1:v,
+    if i~=1,
+        constr1 = [constr1;x(i,i) == 0];
+    end
     constr1 = [constr1; sum(x(:,i+1)) == 1]; % constraints w.r.t. (2)
     constr1 = [constr1; sum(x(i,:)) == 1];   % constraints w.r.t. (3)
 end
@@ -150,7 +153,7 @@ Q = sdpvar(v+1,1);   % decision variable for load of vehicle (really need intvar
 q = [d;0];
 for i = 1:v+1,
     for j = 1:v+1,
-        if ~isnumeric(x(i,j)),
+        if ~isnumeric(x(i,j)) && i~=j,
             constr1 = [constr1; implies(x(i,j),Q(j) == Q(i) + q(j))];
         end
     end
@@ -169,7 +172,7 @@ for i = 1:v+1,
         constr1 = [constr1;B(i)<=B(n+i)];
     end
     for j = 1:v+1,
-        if ~isnumeric(x(i,j)),
+        if ~isnumeric(x(i,j)) && i~=j,
            constr1 = [constr1;implies(x(i,j),B(j)>=B(i)+t(i,j)+dd(i))]; 
         end
     end
@@ -180,6 +183,7 @@ end
 assign(x,init_ILP);
 
 obj1 = sum(sum(c.*x)) + y;
+ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',0);
 
 outputILP = optimize(constr1,obj1,ops)
 obj_ILP = value(obj1)-value(y);
