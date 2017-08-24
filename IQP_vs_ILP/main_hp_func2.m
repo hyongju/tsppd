@@ -183,7 +183,7 @@ end
 assign(x,init_ILP);
 
 obj1 = sum(sum(c.*x)) + y;
-ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',0);
+ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
 
 outputILP = optimize(constr1,obj1,ops)
 obj_ILP = value(obj1)-value(y);
