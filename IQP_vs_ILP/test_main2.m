@@ -12,12 +12,12 @@
 clear all;close all;clc
 
 
-n = 6 ;             % number of custumers(n)
-k = 1;              % capacity   
+n = 10 ;             % number of custumers(n)
+k = 2;              % capacity   
 v = 2*n+1;
-beta = 0.5;
-appx1 = 0.1;
-appx2 = 1e-1;
+beta = 1;
+appx1 = 0.5;
+appx2 = 0.03;
 % alpha = 0.01;
 % construct map and cost map
 % file = strcat('map',num2str(n),'.mat');   
@@ -26,7 +26,7 @@ appx2 = 1e-1;
 
 
 
-nIter = 1;
+nIter = 3;
 
 for m = 1:nIter
     m
@@ -62,7 +62,7 @@ for m = 1:nIter
 
 
 
-    [init_ILP,init_IQP,obj_IG] = calcInitalValue(n,k,v,c,appx1);
+    [init_ILP,init_IQP,obj_IG] = calcInitalValueRand(n,k,v,c,appx1);
 
     [outputILP,obj_ILP,solution_ILP,outputIQP,obj_IQP,solution_IQP] = main_hp_func2(n,k,v,c,appx2,init_ILP,init_IQP);
 
