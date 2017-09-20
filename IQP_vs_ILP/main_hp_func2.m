@@ -99,16 +99,20 @@ constr = [constr; X(v,1)==1];
 
 % ops = sdpsettings('verbose',1,'solver','mosek');
 % ops = sdpsettings('verbose',0,'solver','cplex');
-ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+% ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+% ops = sdpsettings('solver','lindo','verbose',3,'showprogress',1,'debug',1,'usex0',0);
+ops = sdpsettings('solver','lindo','debug',1);
 
+% ops.lindo.mip.
 % ops = cplexoptimset('cplex'); 
 % ops.cplex.mip.limits.nodes=400; 
 % ops.cplex.mip.strategy.search=1;
+% ops.lindo.LS_IPARAM_MIP_CONCURRENT_REOPTMODE = 1
 % ops.cplex.mip.strategy.bbinterval=1;
-ops.cplex.mip.tolerances.mipgap=appx;
+% ops.cplex.mip.tolerances.mipgap=appx;
 % ops.cplex.mip.tolerances.absmipgap=appx;
 % ops.cplex.mip.preprocessing.presolve=0;
-ops.cplex.display = 'on';
+% ops.cplex.display = 'on';
 outputIQP = optimize(constr,obj,ops)
 obj_IQP = value(obj) - c(1,1)*v;
 % obj_IQP = value(obj);
@@ -183,7 +187,7 @@ end
 assign(x,init_ILP);
 
 obj1 = sum(sum(c.*x)) + y;
-ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+% ops = sdpsettings('solver','lindo','verbose',3,'showprogress',1,'debug',1,'usex0',1);
 
 outputILP = optimize(constr1,obj1,ops)
 obj_ILP = value(obj1)-value(y);
