@@ -64,7 +64,7 @@ for m = 1:nIter
 
     [init_ILP,init_IQP,obj_IG] = calcInitalValueRand(n,k,v,c,appx1);
 
-    [outputILP,obj_ILP,solution_ILP,outputIQP,obj_IQP,solution_IQP] = main_hp_func2(n,k,v,c,appx2,init_ILP,init_IQP);
+    [outputILP,obj_ILP,solution_ILP,outputIQP,obj_IQP,solution_IQP] = main_hp_fu6nc2(n,k,v,c,appx2,init_ILP,init_IQP);
 
 
     

@@ -102,11 +102,15 @@ constr = [constr; X(v,1)==1];
 % ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
 % ops.cplex.mip.tolerances.mipgap=appx;
 % ops.cplex.display = 'on';
+ 
+
 
 % ops = cplexoptimset('cplex'); 
 % ops.cplex.mip.limits.nodes=400; 
 % ops.cplex.mip.strategy.search=1;
+
 % ops.cplex.mip.strategy.bbinterval=1;
+
 % ops.cplex.mip.tolerances.absmipgap=appx;
 % ops.cplex.mip.preprocessing.presolve=0;
 
@@ -116,8 +120,10 @@ ops.gurobi.MIPGap = appx;
 % ops.gurobi.MIPGapAbs = 0.01;
 
 
-
-
+% ops.cplex.mip.tolerances.mipgap=appx;
+% ops.cplex.mip.tolerances.absmipgap=appx;
+% ops.cplex.mip.preprocessing.presolve=0;
+% ops.cplex.display = 'on';
 
 outputIQP = optimize(constr,obj,ops)
 obj_IQP = value(obj) - c(1,1)*v;
