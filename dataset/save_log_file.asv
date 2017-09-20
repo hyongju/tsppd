@@ -1,0 +1,8 @@
+% Format for "filename"
+% | test number | sample number | IQP = 0, ILP = 1 | CPLEX=1, GUROBI=2,
+% MOSEK=3, BARON=4,XPRESS=5 |
+% e.g., 0800111
+%   | 08 | 001 | 1 | 1 | 
+%   test number is 8, smaple number is 1, ILP, CPLEX
+test_num = 8;
+sample_num = 1;
