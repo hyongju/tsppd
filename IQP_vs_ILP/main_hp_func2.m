@@ -102,11 +102,18 @@ constr = [constr; X(v,1)==1];
 % ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
 % ops.cplex.mip.tolerances.mipgap=appx;
 % ops.cplex.display = 'on';
+<<<<<<< HEAD
+=======
+ 
+
+>>>>>>> 4b4ce61d2c403cf5be6d408bf03ac05a982e56f3
 
 % ops = cplexoptimset('cplex'); 
 % ops.cplex.mip.limits.nodes=400; 
 % ops.cplex.mip.strategy.search=1;
+
 % ops.cplex.mip.strategy.bbinterval=1;
+<<<<<<< HEAD
 % ops.cplex.mip.tolerances.absmipgap=appx;
 % ops.cplex.mip.preprocessing.presolve=0;
 
@@ -118,6 +125,22 @@ ops.gurobi.MIPGap = appx;
 
 
 
+=======
+
+% ops.cplex.mip.tolerances.absmipgap=appx;
+% ops.cplex.mip.preprocessing.presolve=0;
+
+
+ops = sdpsettings('solver','gurobi','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+ops.gurobi.MIPGap = appx;
+% ops.gurobi.MIPGapAbs = 0.01;
+
+
+% ops.cplex.mip.tolerances.mipgap=appx;
+% ops.cplex.mip.tolerances.absmipgap=appx;
+% ops.cplex.mip.preprocessing.presolve=0;
+% ops.cplex.display = 'on';
+>>>>>>> 4b4ce61d2c403cf5be6d408bf03ac05a982e56f3
 
 outputIQP = optimize(constr,obj,ops)
 obj_IQP = value(obj) - c(1,1)*v;

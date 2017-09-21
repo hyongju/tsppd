@@ -1,7 +1,11 @@
 % iqp vs ilp
 clear all,close all,clc;
 
+<<<<<<< HEAD
 n = 50 ;             % number of custumers(n)
+=======
+n = 6 ;             % number of custumers(n)
+>>>>>>> 4b4ce61d2c403cf5be6d408bf03ac05a982e56f3
 k = 2;              % capacity   
 v = 2*n+1;
 
@@ -104,7 +108,11 @@ constr = [constr; X(v,1)==1];
 
 ops = sdpsettings('solver','cplex','verbose',2,'showprogress',1,'debug',1);
 ops.cplex.display = 'on';
+<<<<<<< HEAD
 ops.cplex.mip.tolerances.mipgap=0.035;
+=======
+% ops.cplex.mip.tolerances.mipgap=0.035;
+>>>>>>> 4b4ce61d2c403cf5be6d408bf03ac05a982e56f3
 
 % ops = sdpsettings('solver','baron','verbose',2);
 % ops.baron.cplexlibname = 'cplex1271.dll';  % probably we should not use cplex here

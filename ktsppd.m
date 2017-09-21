@@ -2,11 +2,12 @@
 clear all;close all;clc
 
 k = 1;
-n = 6;             % number of custumers(n) this needs to be divisible by the number k
-q = 6;              % capacity    
+n = 60;             % number of custumers(n) this needs to be divisible by the number k
+q = 2;              % capacity    
 rng('shuffle');     % random seed: shuffle
 alph = 0.6;
 beta = 1.1;
+appx = 0.035;
 % generate random vehicle, customer pickup and delivery locations from [0,1]x[0,1]
 % vehicle node: 1
 % pick-up nodes: 2,...,n+1
@@ -31,7 +32,8 @@ for i = 1:size(c,1)
         sum_c(i) = sum_c(i) + abs(c(i,j));
     end
     c(i,i) = c(i,i) + beta * sum_c(i);
-    cM(i) = c(i,i);
+%     c(i,i)=0;
+%     cM(i) = c(i,i);
 end
 all(eig(c)>=0)  % check if c is PSD
 % adjacency matrix for a default tour: 1->2->3->..->2n->2n+1
@@ -104,9 +106,20 @@ for i = 1:n
 end
 
 obj =x'*Q*x;
-ops = sdpsettings('verbose',1);
-optimize(F,obj,ops)
+% ops = sdpsettings('verbose',2,'solver','cplex');
 
+
+
+ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1);
+
+% ops = cplexoptimset('cplex'); 
+% ops.cplex.mip.limits.nodes=400; 
+% ops.cplex.mip.strategy.search=1;
+% ops.cplex.mip.strategy.bbinterval=1;
+ops.cplex.mip.tolerances.mipgap=appx;
+% ops.cplex.mip.preprocessing.presolve=0;
+ops.cplex.display = 'on';
+optimize(F,obj,ops)
 % generate the optimal tour from x
 solution = reshape(value(xx),[size(c,1),size(c,2)]);
 tour = round(solution*[1:v]');
