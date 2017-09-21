@@ -4,7 +4,7 @@ function [str_out1,str_out2] = generateFilename(test_num,sample_num,method,solve
 % test_num: e.g., n = 10 (10 customers)
 % sample_num: e,g., test case 1~100
 % method:  0 (IQP), 1 (ILP)
-% solver:  1 (CPLEX), 2 (GUROBI), 3 (MOSEK), 4 (BARON), 5 (EXPRESS)
+% solver:  1 (CPLEX), 2 (GUROBI), 3 (MOSEK), 4 (BARON), 5 (XPRESS)
 
 % OUTPUT==============================================
 % str_out1: filename.txt, str_out2: filename.mat
@@ -41,8 +41,8 @@ switch(numel(str2))
         str2 = sprintf('0%d',sample_num);
     case 3
 end
-str_out1 = strcat(str1,str2,sprintf('%d',method),sprintf('%d',solver),'.txt');
-str_out2 = strcat(str1,str2,sprintf('%d',method),sprintf('%d',solver),'.mat');
+str_out1 = strcat('./log',str1,str2,sprintf('%d',method),sprintf('%d',solver),'.txt');
+str_out2 = strcat('./result',str1,str2,sprintf('%d',method),sprintf('%d',solver),'.mat');
 
 
 
