@@ -1,7 +1,7 @@
 % iqp vs ilp
 clear all,close all,clc;
 
-n = 7 ;             % number of custumers(n)
+n = 50 ;             % number of custumers(n)
 k = 2;              % capacity   
 v = 2*n+1;
 
@@ -34,12 +34,18 @@ for i = 1:size(c,1)
     cM(i) = c(i,i);
 end
 for i = 1:size(c,1)
-    c(i,i) = max(cM);
+    c(i,i) = max(cM)*0.5;
 end
 all(eig(c)>=0)  % check if c is PSD
 
 %% IQP
 constr = [];
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NOT a good idea
+% y = sdpvar(1);                      %
+% constr = [ y == c(1,1)*v];          %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 x = binvar(v^2,1);
 for i = 1:v,
     x(v*(i-1)+1) = 0;
@@ -61,7 +67,7 @@ end
 Q((v-1)*v + 1:(v-1)*v + v,1:v) = c/2;
 Q(1:v,(v-1)*v + 1:(v-1)*v + v) = c/2;
 obj = x'*Q*x;
-
+ 
 % d(i) = +1 (pickup), -1 (deliver)
 d = [0;ones(n,1);-ones(n,1)];
 
@@ -94,10 +100,23 @@ end
 constr = [constr; X(v,1)==1];
 
 % ops = sdpsettings('verbose',1,'solver','mosek');
-ops = sdpsettings('verbose',0,'solver','cplex');
-optimize(constr,obj,ops)
+% ops = sdpsettings('verbose',0,'solver','cplex');
+
+ops = sdpsettings('solver','cplex','verbose',2,'showprogress',1,'debug',1);
+ops.cplex.display = 'on';
+ops.cplex.mip.tolerances.mipgap=0.035;
+
+% ops = sdpsettings('solver','baron','verbose',2);
+% ops.baron.cplexlibname = 'cplex1271.dll';  % probably we should not use cplex here
+% ops.baron.epsr = 0.035;
+
+% ops = sdpsettings('solver','xpress','verbose',2);
+% ops.xpress.MIPRELSTOP = 0.1;
+
+
+IQP = optimize(constr,obj,ops)
 obj_IQP = value(obj) - c(1,1)*v
-solution_IQP = value(X)
+solution_IQP = value(X);
 tour = round(solution_IQP*[1:v]');
 tour = [1;tour];
 draw_tour(tour,n,vert)
@@ -112,6 +131,7 @@ c(:,end) = temp';
 
 % generate decision variable x that in A. Here # of x is larger than # of
 % elements in A, but those extra elements are set to be 0s.
+clear x
 x = binvar(v+1,v+1,'full');
 x(v+1,:) = zeros(1,v+1);
 x(:,1) = zeros(v+1,1);
@@ -121,7 +141,14 @@ end
 x
 
 % set constraints
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% y = sdpvar(1);                      %
+% constr1 = [ y == c(1,1)*v];         %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+y = 0;
 constr1 = [];
+
 for i = 1:v,
     constr1 = [constr1; sum(x(:,i+1)) == 1]; % constraints w.r.t. (2)
     constr1 = [constr1; sum(x(i,:)) == 1];   % constraints w.r.t. (3)
@@ -159,11 +186,12 @@ end
 
 
 % construct object function
-obj1 = sum(sum(c.*x));
+obj1 = sum(sum(c.*x)) + y;
 
-optimize(constr1,obj1,ops)
-obj_ILP = value(obj1)
-solution_ILP = round(value(x))
+
+ILP = optimize(constr1,obj1,ops)
+obj_ILP = value(obj1) - value(y)
+solution_ILP = round(value(x));
 % construct tour
 next = 1;
 tour1 = 1;

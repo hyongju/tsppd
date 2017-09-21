@@ -1,4 +1,4 @@
-function [init_ILP,init_IQP] = calcInitalValueRand(n,k,v,c,appx)
+function [init_ILP,init_IQP,obj_IG] = calcInitalValueRand(n,k,v,c,appx)
 % iqp vs ilp
 % clear all,close all,clc;
 
@@ -94,6 +94,11 @@ xinit= blkdiag(init_IQP,0);
 xinit(1:end,end) = xinit(1:end,1);
 xinit(1:end,1) = zeros(size(xinit,1),1);
 init_ILP = xinit;
+
+A0 = [zeros(v-1,1),eye(v-1);1,zeros(1,v-1)];
+temp = init_IQP*A0*init_IQP';
+obj_IG = sum(sum(c.*temp));
+
 % init_IQP = solution_IQP;
 
 

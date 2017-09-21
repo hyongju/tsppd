@@ -99,16 +99,26 @@ constr = [constr; X(v,1)==1];
 
 % ops = sdpsettings('verbose',1,'solver','mosek');
 % ops = sdpsettings('verbose',0,'solver','cplex');
-ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+% ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+% ops.cplex.mip.tolerances.mipgap=appx;
+% ops.cplex.display = 'on';
 
 % ops = cplexoptimset('cplex'); 
 % ops.cplex.mip.limits.nodes=400; 
 % ops.cplex.mip.strategy.search=1;
 % ops.cplex.mip.strategy.bbinterval=1;
-ops.cplex.mip.tolerances.mipgap=appx;
 % ops.cplex.mip.tolerances.absmipgap=appx;
 % ops.cplex.mip.preprocessing.presolve=0;
-ops.cplex.display = 'on';
+
+
+ops = sdpsettings('solver','gurobi','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+ops.gurobi.MIPGap = appx;
+% ops.gurobi.MIPGapAbs = 0.01;
+
+
+
+
+
 outputIQP = optimize(constr,obj,ops)
 obj_IQP = value(obj) - c(1,1)*v;
 % obj_IQP = value(obj);
@@ -117,6 +127,7 @@ solution_IQP = value(X);
 tour = round(solution_IQP*[1:v]');
 tour = [1;tour];
 % draw_tour(tour,n,vert)
+pause;
 
 %% ILP
 
@@ -183,7 +194,9 @@ end
 assign(x,init_ILP);
 
 obj1 = sum(sum(c.*x)) + y;
-ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+% ops = sdpsettings('solver','cplex','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+ops = sdpsettings('solver','gurobi','verbose',3,'showprogress',1,'debug',1,'usex0',1);
+ops.gurobi.MIPGap = appx;
 
 outputILP = optimize(constr1,obj1,ops)
 obj_ILP = value(obj1)-value(y);

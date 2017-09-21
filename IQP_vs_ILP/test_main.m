@@ -20,6 +20,7 @@ hold on;
 title(sprintf('n = %d, k = %d', n,k));
 set(gca,'FontSize',16);
 xlabel('sample #');ylabel('solver time');
+print -dpng
 
 
 figure,
@@ -29,6 +30,7 @@ legend('ILP','IQP');
 xlabel('solver time');
 ylabel('number of bins');
 set(gca,'FontSize',16);
+print -dpng
 
 figure,
 plot(1:nIter,timeCmp(:,3),'bo-',1:nIter,timeCmp(:,4),'rs-');legend('ILP','IQP');
@@ -36,4 +38,4 @@ hold on;
 title(sprintf('n = %d, k = %d', n,k));
 set(gca,'FontSize',16);
 xlabel('sample #');ylabel('solver time');
-
+print -dpng
