@@ -31,6 +31,7 @@ end
 
 % capability constraint
 Q = sdpvar(v+1,1);   % decision variable for load of vehicle (really need intvar?)
+d = [0;ones(n,1);-ones(n,1)];
 q = [d;0];
 for i = 1:v+1,
     for j = 1:v+1,
@@ -66,7 +67,7 @@ obj = sum(sum(c.*x)) + y;
 % run ILP with 5 solvers
 if n <= 10,           
     ops.solver = 'cplex';
-    [txtfile,matfile] = generateFinename(n,sample_num,1,1);
+    [txtfile,matfile] = generateFilename(n,sample_num,1,1);
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
@@ -74,7 +75,7 @@ if n <= 10,
 end
 if n <= 12,
     ops.solver = 'gurobi';
-    [txtfile,matfile] = generateFinename(n,sample_num,1,2);
+    [txtfile,matfile] = generateFilename(n,sample_num,1,2);
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
@@ -82,7 +83,7 @@ if n <= 12,
 end
 if n <= 12,
     ops.solver = 'mosek';
-    [txtfile,matfile] = generateFinename(n,sample_num,1,3);
+    [txtfile,matfile] = generateFilename(n,sample_num,1,3);
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
@@ -90,7 +91,7 @@ if n <= 12,
 end
 if n <= 12,
     ops.solver = 'baron';
-    [txtfile,matfile] = generateFinename(n,sample_num,1,4);
+    [txtfile,matfile] = generateFilename(n,sample_num,1,4);
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
@@ -98,7 +99,7 @@ if n <= 12,
 end
 if n <= 12,
     ops.solver = 'xpress';
-    [txtfile,matfile] = generateFinename(n,sample_num,1,5);
+    [txtfile,matfile] = generateFilename(n,sample_num,1,5);
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off

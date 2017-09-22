@@ -1,0 +1,132 @@
+CPXPARAM_Simplex_Display                         2
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_Read_APIEncoding                        "*"
+CPXPARAM_Output_CloneLog                         1
+CPXPARAM_MIP_Tolerances_MIPGap                   0.035000000000000003
+CPXPARAM_MIP_Interval                            20
+CPXPARAM_MIP_Strategy_VariableSelect             1
+CPXPARAM_Barrier_Display                         2
+Tried aggregator 1 time.
+MIP Presolve eliminated 58 rows and 0 columns.
+MIP Presolve added 5140800 rows and 2570400 columns.
+MIP Presolve modified 871134 coefficients.
+Reduced MIP has 5141158 rows, 2584800 columns, and 10540441 nonzeros.
+Reduced MIP has 2584800 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 1.70 sec. (3080.70 ticks)
+Probing time = 18.67 sec. (1216.90 ticks)
+Tried aggregator 1 time.
+MIP Presolve eliminated 3441361 rows and 870961 columns.
+Reduced MIP has 1699797 rows, 1713839 columns, and 5357158 nonzeros.
+Reduced MIP has 1713839 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 6.98 sec. (5448.36 ticks)
+Probing time = 6.44 sec. (620.41 ticks)
+Tried aggregator 1 time.
+Reduced MIP has 1699797 rows, 1713839 columns, and 5357158 nonzeros.
+Reduced MIP has 1713839 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 7.94 sec. (3553.57 ticks)
+Probing time = 6.03 sec. (617.53 ticks)
+Clique table members: 225754.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 1539.47 sec. (270450.18 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0     5630.3101   660                   5630.3101    43850         
+*     0+    0                         5698.5895     5630.3101             1.20%
+GUB cover cuts applied:  35
+Clique cuts applied:  46
+Cover cuts applied:  6
+Implied bound cuts applied:  52
+Flow cuts applied:  3
+Mixed integer rounding cuts applied:  48
+Zero-half cuts applied:  42
+Lift and project cuts applied:  1
+Gomory fractional cuts applied:  7
+
+Root node processing (before b&c):
+  Real time             = 4341.73 sec. (1267768.56 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) = 4341.73 sec. (1267768.56 ticks)
+
+IQP = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+      yalmiptime: 36.1383
+      solvertime: 4.3427e+03
+            info: 'Successfully solved (CPLEX-IBM)'
+         problem: 0
+    solveroutput: [1×1 struct]
+
+CPXPARAM_Simplex_Display                         2
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_Read_APIEncoding                        "*"
+CPXPARAM_Output_CloneLog                         1
+CPXPARAM_MIP_Tolerances_MIPGap                   0.035000000000000003
+CPXPARAM_MIP_Interval                            20
+CPXPARAM_MIP_Strategy_VariableSelect             1
+CPXPARAM_Barrier_Display                         2
+Tried aggregator 1 time.
+MIP Presolve eliminated 58 rows and 0 columns.
+MIP Presolve added 5140800 rows and 2570400 columns.
+MIP Presolve modified 871134 coefficients.
+Reduced MIP has 5141158 rows, 2584800 columns, and 10540441 nonzeros.
+Reduced MIP has 2584800 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 1.73 sec. (3080.70 ticks)
+Probing time = 19.94 sec. (1216.90 ticks)
+Tried aggregator 1 time.
+MIP Presolve eliminated 3441361 rows and 870961 columns.
+Reduced MIP has 1699797 rows, 1713839 columns, and 5357158 nonzeros.
+Reduced MIP has 1713839 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 7.16 sec. (5448.35 ticks)
+Probing time = 6.44 sec. (620.41 ticks)
+Tried aggregator 1 time.
+Reduced MIP has 1699797 rows, 1713839 columns, and 5357158 nonzeros.
+Reduced MIP has 1713839 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 8.05 sec. (3553.56 ticks)
+Probing time = 6.77 sec. (617.53 ticks)
+Clique table members: 225754.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 2385.51 sec. (471816.64 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0     5403.6439   889                   5403.6439    56350         
+GUB cover cuts applied:  33
+Clique cuts applied:  33
+Cover cuts applied:  13
+Implied bound cuts applied:  86
+Flow cuts applied:  3
+Mixed integer rounding cuts applied:  44
+Zero-half cuts applied:  35
+Gomory fractional cuts applied:  9
+
+Root node processing (before b&c):
+  Real time             = 7202.14 sec. (2190992.22 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) = 7202.14 sec. (2190992.22 ticks)
+
+IQP = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+      yalmiptime: 36.2462
+      solvertime: 7.2030e+03
+            info: 'Maximum iterations or time limit exceeded (CPLEX-IBM)'
+         problem: 3
+    solveroutput: [1×1 struct]
+

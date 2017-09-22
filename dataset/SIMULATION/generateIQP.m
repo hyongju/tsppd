@@ -60,7 +60,7 @@ constr = [constr; X(v,1)==1];
 % run IQP with 5 solvers
 if n <= 50,           
     ops.solver = 'cplex';
-    [txtfile,matfile] = generateFinename(n,sample_num,0,1);
+    [txtfile,matfile] = generateFilename(n,sample_num,0,1);
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
@@ -68,7 +68,7 @@ if n <= 50,
 end
 if n <= 25,
     ops.solver = 'gurobi';
-    [txtfile,matfile] = generateFinename(n,sample_num,0,2);
+    [txtfile,matfile] = generateFilename(n,sample_num,0,2);
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
@@ -76,7 +76,7 @@ if n <= 25,
 end
 if n <= 25,
     ops.solver = 'mosek';
-    [txtfile,matfile] = generateFinename(n,sample_num,0,3);
+    [txtfile,matfile] = generateFilename(n,sample_num,0,3);
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
@@ -84,7 +84,7 @@ if n <= 25,
 end
 if n <= 12,
     ops.solver = 'baron';
-    [txtfile,matfile] = generateFinename(n,sample_num,0,4);
+    [txtfile,matfile] = generateFilename(n,sample_num,0,4);
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
@@ -92,7 +92,7 @@ if n <= 12,
 end
 if n <= 30,
     ops.solver = 'xpress';
-    [txtfile,matfile] = generateFinename(n,sample_num,0,5);
+    [txtfile,matfile] = generateFilename(n,sample_num,0,5);
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off

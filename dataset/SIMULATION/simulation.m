@@ -2,7 +2,6 @@ function [ ] = simulation( nlist,elist,k )
 % this file is used to simulate our dateset with n = nlist where n is the 
 % number of customers. elist represent the index of cases that we want to 
 % simulate for each n in nlist. k is the capacity with 2 as the default. 
-    clear all,close all,clc;
     if nargin==2,
         k = 2; 
     elseif nargin<2,
