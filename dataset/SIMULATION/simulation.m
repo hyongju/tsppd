@@ -63,6 +63,6 @@ function [ ] = simulation( nlist,elist,k )
        end                
     end
     
-    junk = 1
+%     junk = 1
 end
 

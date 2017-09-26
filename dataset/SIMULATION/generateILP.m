@@ -71,7 +71,10 @@ if n <= 10,
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'ILP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    res.y = value(y);
+    save(matfile,'ILP','n','sample_num','k','res');
 end
 if n <= 12,
     ops.solver = 'gurobi';
@@ -79,7 +82,10 @@ if n <= 12,
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'ILP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    res.y = value(y);
+    save(matfile,'ILP','n','sample_num','k','res');
 end
 if n <= 12,
     ops.solver = 'mosek';
@@ -87,7 +93,10 @@ if n <= 12,
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'ILP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    res.y = value(y);
+    save(matfile,'ILP','n','sample_num','k','res');
 end
 if n <= 12,
     ops.solver = 'baron';
@@ -95,7 +104,10 @@ if n <= 12,
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'ILP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    res.y = value(y);
+    save(matfile,'ILP','n','sample_num','k','res');
 end
 if n <= 12,
     ops.solver = 'xpress';
@@ -103,7 +115,10 @@ if n <= 12,
     diary(txtfile);diary on
     ILP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'ILP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    res.y = value(y);
+    save(matfile,'ILP','n','sample_num','k','res');
 end   
 
 

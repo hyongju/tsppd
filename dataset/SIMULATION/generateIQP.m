@@ -64,7 +64,9 @@ if n <= 50,
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'IQP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    save(matfile,'IQP','n','sample_num','k','res');
 end
 if n <= 25,
     ops.solver = 'gurobi';
@@ -72,7 +74,9 @@ if n <= 25,
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'IQP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    save(matfile,'IQP','n','sample_num','k','res');
 end
 if n <= 25,
     ops.solver = 'mosek';
@@ -80,7 +84,9 @@ if n <= 25,
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'IQP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    save(matfile,'IQP','n','sample_num','k','res');
 end
 if n <= 12,
     ops.solver = 'baron';
@@ -88,7 +94,9 @@ if n <= 12,
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'IQP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    save(matfile,'IQP','n','sample_num','k','res');
 end
 if n <= 30,
     ops.solver = 'xpress';
@@ -96,7 +104,9 @@ if n <= 30,
     diary(txtfile);diary on
     IQP = optimize(constr,obj,ops);
     diary off
-    save(matfile,'IQP','n','sample_num','k');
+    res.x = value(x);
+    res.obj = value(obj);
+    save(matfile,'IQP','n','sample_num','k','res');
 end   
 
 end
